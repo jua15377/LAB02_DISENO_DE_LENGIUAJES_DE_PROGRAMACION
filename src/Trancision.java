@@ -1,27 +1,12 @@
 public class Trancision {
-    private Estado estadoInicial;
-    private Estado estadoFinal;
     private String simbolos;
     private boolean epsilon;
 
-    public Trancision() {
-
+    public Trancision(String simbolos) {
+        this.simbolos = simbolos;
     }
-
-    public Estado getEstadoInicial() {
-        return estadoInicial;
-    }
-
-    public void setEstadoInicial(Estado estadoInicial) {
-        this.estadoInicial = estadoInicial;
-    }
-
-    public Estado getEstadoFinal() {
-        return estadoFinal;
-    }
-
-    public void setEstadoFinal(Estado estadoFinal) {
-        this.estadoFinal = estadoFinal;
+    public Trancision(boolean epsilon) {
+        this.epsilon = epsilon;
     }
 
     public String getSimbolos() {
@@ -39,4 +24,5 @@ public class Trancision {
     public void setEpsilon(boolean epsilon) {
         this.epsilon = epsilon;
     }
+
 }

@@ -23,4 +23,27 @@ public class SuperClaseHiperMegaPro{
     public List<String> getAlfabeto() {
         return alfabeto;
     }
+    //trabajo en progreso
+    public String analizadorDeAbreviaturas(String cadenaRegex){
+        String nuevaCadena = "";
+        for (int i = 0; i< cadenaRegex.length();i++){
+            //cambia el simbolo de abreviatura por su valor origina
+            if (String.valueOf(cadenaRegex.charAt(i)).equals("+")){
+                nuevaCadena += "("+String.valueOf(cadenaRegex.charAt(i-1)) + String.valueOf(cadenaRegex.charAt(i-1)) + "*)";
+            }
+            else if (String.valueOf(cadenaRegex.charAt(i)).equals("?")){
+                nuevaCadena += "("+String.valueOf(cadenaRegex.charAt(i-1)) + "|@)";
+            }
+            else{
+                nuevaCadena += String.valueOf(cadenaRegex.charAt(i));
+            }
+        }
+        return nuevaCadena;
+    }
+    //crea el automata original
+    public Automata creatAutomata(String transicion){
+        Automata automata = new Automata(transicion);
+        return automata;
+    }
+    // crea el automata de concatenandolopublic Automata concatenacion(Automata a, Automata b){ }
 }
