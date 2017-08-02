@@ -1,23 +1,23 @@
 public class Estado {
-    private boolean esDeAceptacion;
+    private boolean esFinal;
     private boolean esInical;
     private int identifiacador = 0;
 
-    public Estado(boolean esDeAceptacion, boolean esInical) {
-        this.esDeAceptacion = esDeAceptacion;
+    public Estado(boolean esInical, boolean esFinal, int id) {
         this.esInical = esInical;
+        this.esFinal = esFinal;
+        this.identifiacador = id;
 
     }
-
-    public boolean isEsDeAceptacion() {
-        return esDeAceptacion;
+    public boolean getEsFinal() {
+        return esFinal;
     }
 
-    public void setEsDeAceptacion(boolean esDeAceptacion) {
-        this.esDeAceptacion = esDeAceptacion;
+    public void setFinal(boolean esFinal) {
+        this.esFinal = esFinal;
     }
 
-    public boolean isEsInical() {
+    public boolean getEsinicial() {
         return esInical;
     }
 
