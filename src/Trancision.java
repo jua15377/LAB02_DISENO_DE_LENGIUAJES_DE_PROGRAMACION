@@ -6,7 +6,7 @@ public class Trancision {
     public Trancision(Estado estIni, Estado estFin, String simbolos){
         this.simbolos = simbolos;
         this.estadoInicial = estIni;
-        this.estadoFinal = estFin
+        this.estadoFinal = estFin;
     }
 
     public String getSimbolos() {

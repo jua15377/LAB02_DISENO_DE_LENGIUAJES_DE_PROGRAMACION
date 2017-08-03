@@ -23,7 +23,7 @@ public class Automata {
      * Crea un nodo  y lo agrega al automata
      */
     public void addEstado(Automata a, int idEstaod, boolean esInicial, boolean esFinal){
-        Estado estadoNuevo = new Estado(idEstaod, esInicial, esFinal);
+        Estado estadoNuevo = new Estado(esInicial, esFinal, idEstaod);
         a.estados.add(estadoNuevo);
         a.mapaDeEstados.put(idEstaod,estadoNuevo);
     }
@@ -31,9 +31,9 @@ public class Automata {
     /**
      * otra forma de agregar nodos
      */
-    public void addEstado (Automata a, Estado estadoAAgregar){
-        a.estados.add(estadoAAgregar);
-        a.mapaDeEstados.put(estadoAAgregar.getIdentifiacador(),estadoAAgregar);
+    public void addEstado(Automata a, Estado estadoAgregar){
+        a.estados.add(estadoAgregar);
+        a.mapaDeEstados.put(estadoAgregar.getIdentifiacador(),estadoAgregar);
     }
 
     /**
@@ -54,7 +54,6 @@ public class Automata {
 
     /**
      * Obtiene el nodo inicial del automata
-     * @return nodo inicial
      */
     public Estado getEstadoInicale(){
         HashSet<Estado> estados = getTodosLosEstados();
@@ -63,7 +62,7 @@ public class Automata {
             if (i.getEsinicial()){
                 return i;
             }
-        }
+        }return null;
     }
     /**
      * Devuelve el hasset de los Estados
@@ -78,10 +77,10 @@ public class Automata {
         HashSet<Estado> estados = getTodosLosEstados();
         for (Estado i : estados) {
             // Buscar el nodo final
-            if (i.getEsFinal()){
+            if (i.getEsFinal()) {
                 return i;
             }
-        }
+        }return null;
     }
     /**
      * Obtiene un nodo especifico
@@ -106,5 +105,25 @@ public class Automata {
 
     public HashMap<Integer, Estado> getMapaDeEstados() {
         return mapaDeEstados;
+    }
+    @Override
+    public String toString(){
+//        imprimir Estados
+        HashSet<Estado> estados = getTodosLosEstados();
+        String resultNodos = "Estados: {";
+        int contador = 0;
+        for (Estado i: estados) {
+            resultNodos = resultNodos + String.valueOf((i.getIdentifiacador()));
+            if (contador < estados.size()-1){
+                resultNodos = resultNodos + ", ";
+            }
+            else {
+                resultNodos = resultNodos + "}\n";
+            }
+            contador ++;
+        }
+
+        resultNodos += "\t- Son " + contador + " estados\n";
+        return  resultNodos;
     }
 }
