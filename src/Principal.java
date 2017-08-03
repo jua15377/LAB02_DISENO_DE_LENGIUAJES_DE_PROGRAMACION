@@ -1,3 +1,4 @@
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
@@ -27,6 +28,10 @@ public class Principal {
         System.out.println("concatenacion");
         Automata afn = unaClase.analizador(expresionPostfix);
         System.out.println(afn.toString());
+        HashSet<Trancision> trans =  afn.getTransicoines();
+        for(Trancision i : trans){
+            System.out.println(i.toString());
+        }
 
     }
 }

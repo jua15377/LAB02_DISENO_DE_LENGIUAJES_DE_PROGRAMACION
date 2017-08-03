@@ -1,4 +1,6 @@
 
+import com.sun.org.apache.regexp.internal.RE;
+
 import java.util.*;
 /**
  * @author Jonnathan Juarez
@@ -60,7 +62,6 @@ public class SuperClaseHiperMegaPro {
                     Automata b = stackDeAutomatas.pop();
                     alfabeto.toString();
                     Automata a = stackDeAutomatas.pop();
-                    b.toString();
                     Automata resultante = crearConcatenacion(a, b);
                     stackDeAutomatas.add(resultante);
                 }
@@ -86,7 +87,6 @@ public class SuperClaseHiperMegaPro {
 //            no hace ningua operacion
             else {
                 Automata automata = crearAutomataSimple(String.valueOf(simboloAct));
-                System.out.println(automata.toString());
                 stackDeAutomatas.add(automata);
             }
         }
@@ -101,27 +101,40 @@ public class SuperClaseHiperMegaPro {
         return a;
     }
     public Automata crearConcatenacion(Automata a, Automata b){
-        HashSet<Estado> estadosB = b.getTodosLosEstados();
+        HashSet<Estado> estadosB = b.getEstados();
         HashSet<Trancision> transicoinesB = b.getTransicoines();
-//agregando estados
-        for(Estado e: estadosB){
-            if(!e.getEsinicial()){
-                a.addEstado(a, e);
-            }
-        }
+
 //        agregar trancion
         for (Trancision t: transicoinesB){
             if(t.getEstadoInicial().getEsinicial()){
-                a.getEstadoFinal().setFinal(false);  // Quitarle propiedad de nodo final a op1FinalNode
+                t.setEstadoInicial(a.getEstadoFinal());
+                a.getEstadoFinal().setFinal(false);  // Quitarle propiedad de nodo final al estado Final de A
                 a.addTrancion(a, t);  // Agregar a nuevo automata
+
             }
             else {
                 a.addTrancion(a,t);
             }
         }
+        //agregando estados de B a A
+        for(Estado e: estadosB){
+            if(!e.getEsinicial()){
+                a.addEstado(a, e);
+            }
+        }
         return a;
     }
     public Automata crearOr(Automata a, Automata b){
+        Estado i = new Estado(true,false,contador);
+        Automata Resultamte = new Automata();
+        //agrega el nodo de inicio
+        Resultamte.addEstado(Resultamte, i);
+        //obtener el los estados y transicone de ambos automatas
+        HashSet<Estado> estadosA = a.getEstados();
+        HashSet<Estado> estadosB = b.getEstados();
+        HashSet<Trancision> transA = a.getTransicoines();
+        HashSet<Trancision> transB = b.getTransicoines();
+
         return null;
     }
     public Automata crearkleen(Automata a){

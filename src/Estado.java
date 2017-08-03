@@ -1,3 +1,5 @@
+import java.lang.annotation.Native;
+
 public class Estado {
     private boolean esFinal;
     private boolean esInical;
@@ -31,5 +33,10 @@ public class Estado {
 
     public void setIdentifiacador(int identifiacador) {
         this.identifiacador = identifiacador;
+    }
+
+    @Override
+    public String toString(){
+        return String.valueOf(identifiacador) +',' +esInical + ',' + esFinal;
     }
 }

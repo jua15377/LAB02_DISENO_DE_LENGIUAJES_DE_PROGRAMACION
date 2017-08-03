@@ -38,4 +38,10 @@ public class Trancision {
         Trancision t = (Trancision) obj;
         return t.getEstadoFinal() == estadoFinal && t.getEstadoInicial() == estadoInicial;
     }
+    @Override
+    public String toString(){
+        return "(" + String.valueOf(estadoInicial.getIdentifiacador() )+
+                ", " + simbolos + ", " +
+                String.valueOf(estadoFinal.getIdentifiacador()) + ")";
+    }
 }

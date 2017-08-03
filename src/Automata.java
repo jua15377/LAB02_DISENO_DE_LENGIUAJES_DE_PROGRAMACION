@@ -56,7 +56,7 @@ public class Automata {
      * Obtiene el nodo inicial del automata
      */
     public Estado getEstadoInicale(){
-        HashSet<Estado> estados = getTodosLosEstados();
+        HashSet<Estado> estados = getEstados();
         for (Estado i : estados) {
             // Buscar el nodo inicial
             if (i.getEsinicial()){
@@ -65,16 +65,10 @@ public class Automata {
         }return null;
     }
     /**
-     * Devuelve el hasset de los Estados
-     */
-    public HashSet<Estado> getTodosLosEstados(){
-        return estados;
-    }
-    /**
      * Obtiene el nodo final del automata
      */
     public Estado getEstadoFinal(){
-        HashSet<Estado> estados = getTodosLosEstados();
+        HashSet<Estado> estados = getEstados();
         for (Estado i : estados) {
             // Buscar el nodo final
             if (i.getEsFinal()) {
@@ -85,7 +79,7 @@ public class Automata {
     /**
      * Obtiene un nodo especifico
      */
-    public  Estado obtenerUnNodo(int id){
+    public  Estado obtenerEstado(int id){
         if (mapaDeEstados.containsKey(id))
             return mapaDeEstados.get(id);
 //        encaso no exista devulve null
@@ -109,7 +103,7 @@ public class Automata {
     @Override
     public String toString(){
 //        imprimir Estados
-        HashSet<Estado> estados = getTodosLosEstados();
+        HashSet<Estado> estados = getEstados();
         String resultNodos = "Estados: {";
         int contador = 0;
         for (Estado i: estados) {
