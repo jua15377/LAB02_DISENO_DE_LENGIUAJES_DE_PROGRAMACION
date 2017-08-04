@@ -1,10 +1,4 @@
 
-import com.sun.org.apache.regexp.internal.RE;
-import org.omg.CORBA.TRANSACTION_MODE;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
-import java.sql.ResultSet;
 import java.util.*;
 /**
  * @author Jonnathan Juarez
@@ -13,7 +7,7 @@ import java.util.*;
 public class SuperClaseHiperMegaPro {
 
     private List<String> alfabeto = new ArrayList<String>();
-    private ArrayList<String> operadoresList = new ArrayList<String>(Arrays.asList(".", "|", "*", "+", "?", "^"));
+    private ArrayList<String> operadoresList = new ArrayList<String>(Arrays.asList(".", "|", "*", "+", "?", "^","@"));
     private static Stack<Automata> stackDeAutomatas = new Stack<>();
     public static int contador = 0;
     //constructor
@@ -64,7 +58,6 @@ public class SuperClaseHiperMegaPro {
                 if (simboloAct == '.'){
 //                    extrae los automatas a trabajar
                     Automata b = stackDeAutomatas.pop();
-                    alfabeto.toString();
                     Automata a = stackDeAutomatas.pop();
                     Automata resultante = crearConcatenacion(a, b);
                     stackDeAutomatas.add(resultante);
@@ -83,7 +76,7 @@ public class SuperClaseHiperMegaPro {
                 if (simboloAct == '*'){
 //                    extrae el automata a trabajar
                     Automata a = stackDeAutomatas.pop();
-                    Automata resultante = crearkleen(a);
+                    Automata resultante = crearkleene(a);
                     stackDeAutomatas.add(resultante);
                 }
 //                se esta trabajando en elresto de automatas
@@ -197,7 +190,26 @@ public class SuperClaseHiperMegaPro {
         //devolver el atomata generado
         return resultamte;
     }
-    public Automata crearkleen(Automata a){
-        return null;
+    public Automata crearkleene(Automata a){
+        //estados ficticios extras.
+        Estado i = new Estado(true,false,contador);
+        //crea estado final
+        Automata f = crearAutomataSimple("@");
+        //crea trnasicion entre el nodo final y el inicial del automata base
+        Trancision t1 = new Trancision(a.getEstadoFinal(),a.getEstadoInicale(), "@");
+        a.addTrancion(a, t1);
+        //agrega estado inicial
+        Trancision t2 = new Trancision(i,a.getEstadoInicale(), "@");
+        a.addEstado(a, i);
+        //"desactiva " el estado inicial anterior , cono inicial
+        a.getEstadoInicale().setEsInical(false);
+        a.addTrancion(a, t2);
+        //concatena el automata con el estado final ficticio
+        Automata a2 = crearConcatenacion(a,f);
+        //crea la ultima transicion que permite al automata saltar del inicio al final
+        Trancision t3 = new Trancision(a2.getEstadoInicale(), a2.getEstadoFinal(),"@");
+        a2.addTrancion(a2, t3);
+        //devueleve el nuevo automata
+        return a2;
     }
 }

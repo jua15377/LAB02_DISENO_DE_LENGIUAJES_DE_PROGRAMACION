@@ -1,3 +1,8 @@
+/**
+ * @author Jonnathan Juarez
+ * @version 1.0 02/08/2017
+ */
+
 public class Trancision {
     private String simbolos;
     private Estado estadoInicial;

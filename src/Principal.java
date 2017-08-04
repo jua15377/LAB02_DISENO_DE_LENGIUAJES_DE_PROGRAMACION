@@ -31,6 +31,9 @@ public class Principal {
             System.out.println(i.toString());
         }
         System.out.println("el estado final es");
-        System.out.println(afn.getEstadoFinal().toString());
+        System.out.println(afn.getEstadoFinal().getIdentifiacador());
+
+        System.out.println("el estado inicial es");
+        System.out.println(afn.getEstadoInicale().getIdentifiacador());
     }
 }
