@@ -1,6 +1,10 @@
 
 import com.sun.org.apache.regexp.internal.RE;
+import org.omg.CORBA.TRANSACTION_MODE;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import java.sql.ResultSet;
 import java.util.*;
 /**
  * @author Jonnathan Juarez
@@ -104,7 +108,7 @@ public class SuperClaseHiperMegaPro {
         HashSet<Estado> estadosB = b.getEstados();
         HashSet<Trancision> transicoinesB = b.getTransicoines();
 
-//        agregar trancion
+//        agregar tranciones
         for (Trancision t: transicoinesB){
             if(t.getEstadoInicial().getEsinicial()){
                 t.setEstadoInicial(a.getEstadoFinal());
@@ -124,18 +128,74 @@ public class SuperClaseHiperMegaPro {
         }
         return a;
     }
+
+
     public Automata crearOr(Automata a, Automata b){
+        //crear estado final
         Estado i = new Estado(true,false,contador);
-        Automata Resultamte = new Automata();
-        //agrega el nodo de inicio
-        Resultamte.addEstado(Resultamte, i);
+        // crear estado final.
+        Estado f = new Estado(false, true,contador+1);
+        Automata resultamte = new Automata();
+        //agrega los estados
+        resultamte.addEstado(resultamte, i);
+        resultamte.addEstado(resultamte, f);
         //obtener el los estados y transicone de ambos automatas
         HashSet<Estado> estadosA = a.getEstados();
         HashSet<Estado> estadosB = b.getEstados();
         HashSet<Trancision> transA = a.getTransicoines();
         HashSet<Trancision> transB = b.getTransicoines();
+        //crear transicones inicales
+        Trancision t1 = new Trancision(resultamte.getEstadoInicale(),a.getEstadoInicale(),"@");
+        Trancision t2 = new Trancision(resultamte.getEstadoInicale(),b.getEstadoInicale(),"@");
+        Trancision t3 = new Trancision(a.getEstadoFinal(),resultamte.getEstadoFinal(),"@");
+        Trancision t4 = new Trancision(b.getEstadoFinal(),resultamte.getEstadoFinal(),"@");
+        //crear transciones del nodod incial a los automastas
+        resultamte.addTrancion(resultamte,t1);
+        resultamte.addTrancion(resultamte,t2);
+        //agregar transiciones de A
+        for (Trancision t: transA){
 
-        return null;
+            if(t.getEstadoInicial().getEsinicial()){
+                t.getEstadoInicial().setEsInical(false);  // Quitarle propiedad de nodo final al estado Final de A
+                resultamte.addTrancion(resultamte, t);  // Agregar a nuevo automata
+            }
+            if(t.getEstadoFinal().getEsFinal()){
+                t.getEstadoFinal().setFinal(false);
+                resultamte.addTrancion(resultamte, t);
+                //agrega la ultima transicion
+                resultamte.addTrancion(resultamte, t3);
+            }
+            else {
+                resultamte.addTrancion(resultamte,t);
+            }
+        }
+        //agrega estados de A
+        for(Estado e: estadosA){
+                resultamte.addEstado(resultamte, e);
+            }
+    //agregar transiciones de b
+        for (Trancision t: transB){
+
+        if(t.getEstadoInicial().getEsinicial()){
+            t.getEstadoInicial().setEsInical(false);  // Quitarle propiedad de nodo final al estado Final de A
+            resultamte.addTrancion(resultamte, t);  // Agregar a nuevo automata
+        }
+        if(t.getEstadoFinal().getEsFinal()){
+            t.getEstadoFinal().setFinal(false);
+            resultamte.addTrancion(resultamte, t);
+            //agrega la ultima transicion
+            resultamte.addTrancion(resultamte, t4);
+        }
+        else {
+            resultamte.addTrancion(resultamte,t);
+        }
+    }
+    //agrega estados de A
+        for(Estado e: estadosB){
+        resultamte.addEstado(resultamte, e);
+    }
+        //devolver el atomata generado
+        return resultamte;
     }
     public Automata crearkleen(Automata a){
         return null;

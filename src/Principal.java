@@ -25,13 +25,12 @@ public class Principal {
         //devuelve el alfabeto
         System.out.println("alfabeto");
         System.out.println(unaClase.getAlfabeto());
-        System.out.println("concatenacion");
         Automata afn = unaClase.analizador(expresionPostfix);
-        System.out.println(afn.toString());
         HashSet<Trancision> trans =  afn.getTransicoines();
         for(Trancision i : trans){
             System.out.println(i.toString());
         }
-
+        System.out.println("el estado final es");
+        System.out.println(afn.getEstadoFinal().toString());
     }
 }
