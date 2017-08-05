@@ -1,4 +1,8 @@
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 /**
  * @author Jonnathan Juarez
@@ -79,7 +83,16 @@ public class SuperClaseHiperMegaPro {
                     Automata resultante = crearkleene(a);
                     stackDeAutomatas.add(resultante);
                 }
-//                se esta trabajando en elresto de automatas
+                else if(simboloAct == '?'){
+                    Automata a = stackDeAutomatas.pop();
+                    Automata resultante = crearOptional(a);
+                    stackDeAutomatas.add(resultante);
+                }
+                else if(simboloAct == '+'){
+                    Automata a = stackDeAutomatas.pop();
+                    Automata resultante = crearPlusKleene(a);
+                    stackDeAutomatas.add(resultante);
+                }
             }
 //            no hace ningua operacion
             else {
@@ -87,7 +100,9 @@ public class SuperClaseHiperMegaPro {
                 stackDeAutomatas.add(automata);
             }
         }
-        return stackDeAutomatas.pop();
+        Automata automataFinal = stackDeAutomatas.pop();
+        crearTextFile(automataFinal);
+        return automataFinal;
     }
     public Automata crearAutomataSimple(String simbolo){
         Automata a = new Automata();
@@ -100,25 +115,28 @@ public class SuperClaseHiperMegaPro {
     public Automata crearConcatenacion(Automata a, Automata b){
         HashSet<Estado> estadosB = b.getEstados();
         HashSet<Trancision> transicoinesB = b.getTransicoines();
-
+        Estado aNodoFinal = a.getEstadoFinal();
 //        agregar tranciones
-        for (Trancision t: transicoinesB){
-            if(t.getEstadoInicial().getEsinicial()){
-                t.setEstadoInicial(a.getEstadoFinal());
-                a.getEstadoFinal().setFinal(false);  // Quitarle propiedad de nodo final al estado Final de A
-                a.addTrancion(a, t);  // Agregar a nuevo automata
+        // Copiar cada nodo a automata 1 sin copiar nodo inicial anterior
+        for (Estado i: estadosB) {
+            if (!i.getEsinicial()){
+                a.addEstado(a, i);
+            }
+        }
 
+        // Copiar cada transicion a automata 1 cambiando la transicion del nodo inicial anterior
+        for (Trancision i: transicoinesB) {
+            if (!i.getEstadoInicial().getEsinicial()){
+                a.addTrancion(a, i);
             }
+
             else {
-                a.addTrancion(a,t);
+                i.setEstadoInicial(aNodoFinal);  // Cambiar nodo inicial de transicion
+                aNodoFinal.setFinal(false);  // Quitarle propiedad de nodo final a op1FinalNode
+                a.addTrancion(a, i);  // Agregar a nuevo automata
             }
         }
-        //agregando estados de B a A
-        for(Estado e: estadosB){
-            if(!e.getEsinicial()){
-                a.addEstado(a, e);
-            }
-        }
+
         return a;
     }
 
@@ -211,5 +229,84 @@ public class SuperClaseHiperMegaPro {
         a2.addTrancion(a2, t3);
         //devueleve el nuevo automata
         return a2;
+    }
+    public Automata crearOptional(Automata b){
+        Automata a = crearAutomataSimple("@");
+        Automata result = crearOr(b,a);
+        return result;
+    }
+    public Automata crearPlusKleene(Automata automata){
+        //estados ficticios extras.
+        Estado i = new Estado(true,false,contador);
+        //crea estado final
+        Automata f = crearAutomataSimple("@");
+        //crea trnasicion entre el nodo final y el inicial del automata base
+        Trancision t1 = new Trancision(automata.getEstadoFinal(),automata.getEstadoInicale(), "@");
+        automata.addTrancion(automata , t1);
+        //agrega estado inicial
+        Trancision t2 = new Trancision(i, automata.getEstadoInicale(), "@");
+        automata.addEstado(automata , i);
+        //"desactiva " el estado inicial anterior , cono inicial
+        automata.getEstadoInicale().setEsInical(false);
+        automata.addTrancion(automata , t2);
+        //concatena el automata con el estado final ficticio
+        Automata a2 = crearConcatenacion(automata ,f);
+        //devueleve el nuevo automata
+        return a2;
+    }
+    // metodo que se encarga de crear el archiv de texto
+    public void crearTextFile(Automata automata){
+        /**
+         * ESTADOS = {0, 1,… n}
+         SIMBOLOS = {a, b, c,… z}
+         INICIO = {0}
+         ACEPTACION = {0, 1,… n}
+         TRANSICION = (0, a, 1)-(0, e, 2)- … (3, b, n)
+         */
+        //agrega la informacion de los estados del automata
+        String texto = "";
+        HashSet<Estado> estados = automata.getEstados();
+        texto += "ESTADOS = {";
+        int contador = 0;
+        for (Estado e: estados) {
+            texto += String.valueOf((e.getIdentifiacador()));
+            if (contador < estados.size()-1){
+                texto  += ", ";
+            }
+            else {
+                texto += "}\n";
+            }
+            contador ++;
+        }
+
+        texto += "En total son: " + contador + " estados\n";
+        // agrega simbolos del alfabeto
+        texto += "SIMBOLOS = " + getAlfabeto() +"\n";
+        // agregar nodo final e inicial
+        texto +=  "INICIO = {"+ String.valueOf(automata.getEstadoInicale().getIdentifiacador()) +"}\n";
+        texto +=  "ACEPTACION = {"+ String.valueOf(automata.getEstadoFinal().getIdentifiacador()) +"}\n";
+        // agregando transcione
+        HashSet<Trancision> transiones = automata.getTransicoines();
+        texto += "TRANCIONES = {";
+        int contador2 = 0;
+        for (Trancision t: transiones) {
+            texto += t.toString();
+            if (contador < transiones.size()-1){
+                texto  += "-";
+            }
+            else {
+                texto += "}";
+            }
+            contador2 ++;
+        }
+        texto += "\nEn total son: " + contador2 + " transiones\n";
+        try {
+            Writer output;
+            output = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "\\Resultados.txt"));  //clears file every time
+            output.append(texto);
+            output.close();
+        }catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
     }
 }
