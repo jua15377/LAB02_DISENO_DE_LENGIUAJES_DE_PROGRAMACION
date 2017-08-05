@@ -45,8 +45,8 @@ public class Trancision {
     }
     @Override
     public String toString(){
-        return "(" + String.valueOf(estadoInicial.getIdentifiacador() )+
+        return "[" + String.valueOf(estadoInicial.getIdentifiacador() )+
                 ", " + simbolos + ", " +
-                String.valueOf(estadoFinal.getIdentifiacador()) + ")";
+                String.valueOf(estadoFinal.getIdentifiacador()) + "]";
     }
 }

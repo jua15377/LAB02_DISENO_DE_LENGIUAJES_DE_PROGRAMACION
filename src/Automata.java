@@ -100,24 +100,4 @@ public class Automata {
     public HashMap<Integer, Estado> getMapaDeEstados() {
         return mapaDeEstados;
     }
-    @Override
-    public String toString(){
-//        imprimir Estados
-        HashSet<Estado> estados = getEstados();
-        String resultNodos = "Estados: {";
-        int contador = 0;
-        for (Estado i: estados) {
-            resultNodos = resultNodos + String.valueOf((i.getIdentifiacador()));
-            if (contador < estados.size()-1){
-                resultNodos = resultNodos + ", ";
-            }
-            else {
-                resultNodos = resultNodos + "}\n";
-            }
-            contador ++;
-        }
-
-        resultNodos += "\t- Son " + contador + " estados\n";
-        return  resultNodos;
-    }
 }

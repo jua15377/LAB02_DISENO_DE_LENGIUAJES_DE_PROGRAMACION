@@ -40,6 +40,6 @@ public class Estado {
 
     @Override
     public String toString(){
-        return String.valueOf(identifiacador) +',' +esInical + ',' + esFinal;
+        return "Identificador: " + String.valueOf(identifiacador) +", Es inicial:" +esInical + ", Es final: " + esFinal;
     }
 }

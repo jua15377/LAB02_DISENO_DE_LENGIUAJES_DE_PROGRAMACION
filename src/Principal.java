@@ -16,8 +16,9 @@ public class Principal {
 
 
         //PEDIR REGEX AL USUARIO
-        System.out.println("Ingrese la expresion regular del automata");
+        System.out.println("Ingrese la expresion regular del automata. Notose @ simboliza epsilon");
         entrada = teclado.nextLine();
+        //entrada = "ab*";
         String expresionPostfix = RegExConverter.infixToPostfix(entrada);
         System.out.println(expresionPostfix);
         unaClase.determinarAlfabeto(expresionPostfix);
@@ -25,7 +26,13 @@ public class Principal {
         //devuelve el alfabeto
         System.out.println("alfabeto");
         System.out.println(unaClase.getAlfabeto());
+        long startTime = System.currentTimeMillis();
         Automata afn = unaClase.analizador(expresionPostfix);
+        long finishTime = System.currentTimeMillis();
+        long tiempo = finishTime - startTime;
+        System.out.println("Tiempo es: ");
+        System.out.println(tiempo);
+
         HashSet<Trancision> trans =  afn.getTransicoines();
         for(Trancision i : trans){
             System.out.println(i.toString());
